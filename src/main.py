@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 import sys
 import os
 import pandas as pd
-from CSVeditor.AppSettings3 import Ui_MainWindow
+from CSVeditor.gui import Ui_MainWindow
 from UI_logic import UICallbacks
 
 # os.environ["QT_SCALE_FACTOR"] = "2"

@@ -1,6 +1,6 @@
 import pandas as pd
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5 import QtWidgets, QtCore, Qt
+from PyQt5.QtWidgets import QFileDialog, QListWidget
 
 from data_processing import DataProcessing
 
@@ -13,7 +13,7 @@ class UICallbacks:
     def __init__(self, main_window_instance):
         self.main_window = main_window_instance
         self.data_processor = DataProcessing()
-
+ 
     def _populate_list_wiget(self, list_wiget: QtWidgets.QListWidget, columns: list[str]):
         """
         Supporting function for populate list wiget
@@ -82,7 +82,7 @@ class UICallbacks:
         dir_name = QFileDialog.getExistingDirectory(self.main_window, "Select a Directory")
         output_path = str(dir_name)
         if output_path:
-            if len(self.main_window.dfs) != 2:
+            if len(self.main_window.dfs)<=2:
                 self.main_window.ui.path_text_3.setPlainText(output_path)
                 self.main_window.set_output_path(output_path)
                 return
@@ -99,7 +99,7 @@ class UICallbacks:
         try:
             file_1 = self.main_window.dfs[0]
             file_2 = self.main_window.dfs[1]
-            response = self.data_processor.concat_files(file_1, file_2, self.main_window.OUTPUT_PATH, self.main_window.ui.name_of_output_file_plain_text_1.toPlainText())
+            response = self.data_processor.concat_files(file_1, file_2, output_path=self.main_window.OUTPUT_PATH, filename=self.main_window.ui.name_of_output_file_plain_text_1.toPlainText())
             self.main_window.update_response_text(response.get("msg"))
             self.print_status_text()
         except ValueError as ex:
@@ -133,6 +133,67 @@ class UICallbacks:
         else: # if SORT isn't OK
             self.main_window.update_response_text(new_df.get("msg"))
             self.print_status_text()
+
+    def merge(self):
+        '''
+        Merging two DataFrames (by(parameter=on) identical columns)
+        how parameter - any value from:
+
+            "inner" (default) - final DataFrame includes ONLY those lines
+                that have matches in both DataFrames.
+
+            "left" - final DataFrame includes all lines from first DataFrame and
+                the corresponding lines from the second DataFrame. Empty cells = NaN.
+
+            "right" - final DataFrame includes all lines from second DataFrame and
+                the corresponding lines from the first DataFrame. Empty cells = NaN.
+
+            "outer" - final DataFrame includes all lines from both DataFrames and
+                the Empty cells = NaN.
+
+        on parameter - can take "str" or [list] values. Final DataFrame will be sorted
+            by identical name(s) of column(s).
+
+        DON'T WORKING:
+        right_on/left_on parametr - merging two DataFrames by two not identical columns
+        '''
+
+        def iterate_selected_columns(list_widget: QListWidget) -> list[str]:
+            csv_columns = []
+            for index in range(list_widget.count()):
+                if list_widget.item(index).checkState() == Qt.Checked:
+
+                    print(f'[LOG]: {list_widget.item(index).text()} = 1')
+
+                    csv_columns.append(index)
+                else:
+                    print(f'[LOG]: {list_widget.item(index).text()} = 0')
+
+            return csv_columns
+
+        try:
+            csv_columns_1 = iterate_selected_columns(self.main_window.ui.listWidget_1)
+            csv_columns_2 = iterate_selected_columns(self.main_window.ui.listWidget_2)
+
+            print(f'[LOG]: {csv_columns_1} +\n+ {csv_columns_2}')
+
+            df1 = self.main_window.dfs[0]
+            df2 = self.main_window.dfs[1]
+            output_path = self.main_window.OUTPUT_PATH
+            filename = self.main_window.ui.name_of_output_file_plain_text_1.toPlainText()
+            how = self.main_window.ui.how_plain_text_1.toPlainText()
+            on = self.main_window.ui.on_plain_text_1.toPlainText()
+        except Exception as ex:
+            self.main_window.update_response_text(f"merge [ERROR]: {ex}\n{df1}\n{df2}\n{output_path}\n{filename}")
+            self.print_status_text()
+            return
+        merge_response = DataProcessing.merge_dfs(self.data_processor, left_df=df1, right_df=df2, csv_columns_1=csv_columns_1, csv_columns_2=csv_columns_2, merge_how=how, merge_on=on)
+        if isinstance(merge_response, str):
+            self.main_window.update_response_text(merge_response)
+        elif isinstance(merge_response, pd.DataFrame):
+            save_response = DataProcessing.save_dataframe_to_csv(self.data_processor, df=merge_response, output_full_path=output_path, filename=filename)
+            self.main_window.update_response_text(save_response.get('msg'))
+        self.print_status_text()
 
     def print_status_text(self):
         self.main_window.ui.status_text.setPlainText(self.main_window.RESPONSE_TEXT)

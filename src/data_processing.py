@@ -27,7 +27,7 @@ class DataProcessing:
                     "msg": f"[ERROR]: {ex}"
                 }
 
-    def save_dataframe_to_csv(self, df: pd.DataFrame, output_full_path: str, filename: str | None = "new_sort", index: bool | None = False):
+    def save_dataframe_to_csv(self, df: pd.DataFrame, output_full_path: str, filename: str | None = "new_csv", index: bool | None = False):
             """
             Saving the DataFrame to .csv file to path
             """
@@ -55,8 +55,7 @@ class DataProcessing:
             """
             try:
                 new_file = pd.concat([file1_df, file2_df], axis=axis)
-                full_output_path = output_path + "/" + filename + ".csv"
-                raw_name = self.save_dataframe_to_csv(new_file, full_output_path, index=index)
+                raw_name = self.save_dataframe_to_csv(new_file, output_path, filename, index=index)
                 return {
                     "status": 1,
                     "msg": raw_name.get("msg")
@@ -98,3 +97,25 @@ class DataProcessing:
                   "status": 0,
                   "msg": f"sort_df [ERROR]: {ex}"
              }
+
+    def merge_dfs(self, left_df: pd.DataFrame, right_df: pd.DataFrame, csv_columns_1: list, csv_columns_2: list, merge_how:str, merge_on: str | None):
+        try:
+            if (len(csv_columns_1) == 0) or (len(csv_columns_2) == 0): # Need to add 'and' instead of 'or'
+                return "Select columns"
+            # ====Future improvement====
+            # elif len(csv_columns_1) == 0:
+            #     df1 = pd.read_csv(left_df, usecols=csv_columns_2)
+            #     return df1
+            # elif len(csv_columns_2) == 0:
+            #     df2 = pd.read_csv(right_df, usecols=csv_columns_1)
+            #     return df2
+
+            
+            # print(left_df)
+            # print("===")
+            # print(right_df)
+            result = pd.merge(left=left_df, right=right_df, how=merge_how, on=merge_on)
+        except Exception as ex:
+            result = f"merge_dfs [ERROR]: {ex}"
+        finally:
+            return result

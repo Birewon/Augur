@@ -1,55 +1,55 @@
 # PredictiveAnalyticsApp 🚀
 
-### Создавайте предиктивные модели на основе ваших данных 📊
+### Create Predictive Models Based on Your Data 📊
 
-**PredictiveAnalyticsApp** — это удобное настольное приложение, разработанное для упрощения процессов загрузки, редактирования и анализа данных из файлов `.csv`, а также последующего построения мощных предиктивных моделей.
+**PredictiveAnalyticsApp** is a user-friendly desktop application designed to simplify the processes of loading, editing, and analyzing data from `.csv` files, as well as subsequently building powerful predictive models.
 
-Больше нет необходимости писать код для базового анализа или предобработки данных. Наше приложение позволяет быстро подготовить данные и получить прогноз, будь то прогноз погоды, вероятность получения оценки школьником, шансы на успех стартапа или что-то еще, что вы можете себе представить\!
-
------
-
-### Основные возможности 🛠️
-
-  * **📝 Встроенный CSV-редактор:** Интуитивно понятный интерфейс для просмотра, редактирования, сортировки и удаления ненужных столбцов непосредственно в приложении.
-  * **⚙️ Гибкие инструменты предобработки:**
-      * **Сортировка:** Сортируйте данные по одному или нескольким столбцам.
-      * **Объединение:** Объединяйте данные из нескольких `.csv` файлов в один.
-      * **Удаление столбцов:** Легко удаляйте нерелевантные столбцы для очистки данных.
-  * **🔮 Предиктивное моделирование:**
-      * Загружайте подготовленные наборы данных.
-      * Выбирайте целевые переменные для прогнозирования.
-      * Используйте встроенные алгоритмы машинного обучения для построения предиктивных моделей и получения прогнозов.
+No more need to write code for basic analysis or data preprocessing. This application allows you to quickly prepare data and get predictions, whether it's weather forecasting, predicting a student's grade probability, estimating startup success chances, or anything else you can imagine!
 
 -----
 
-### Примеры использования 💡
+### Key Features 🛠️
 
-  * **☁️ Прогноз погоды:** Загрузите исторические данные о погоде (температура, влажность, давление), чтобы предсказать вероятность дождя завтра.
-  * **🧑‍🎓 Образование:** Анализируйте данные об успеваемости студентов, чтобы спрогнозировать вероятность получения высокой оценки на предстоящем экзамене.
-  * **📈 Успех в бизнесе:** Оценивайте рыночные данные и прогнозируйте вероятность успеха нового стартапа.
+* **📝 Built-in CSV Editor:** An intuitive interface for viewing, editing, sorting, and deleting unnecessary columns directly within the application.
+* **⚙️ Flexible Preprocessing Tools:**
+    * **Sorting:** Sort data by one or multiple columns.
+    * **Merging:** Combine data from multiple `.csv` files into one.
+    * **Column Removal:** Easily remove irrelevant columns to clean your data.
+* **🔮 Predictive Modeling:**
+    * Load prepared datasets.
+    * Select target variables for forecasting.
+    * Use built-in machine learning algorithms to build predictive models and obtain forecasts.
 
 -----
 
-### Как начать ▶️
+### Use Cases 💡
 
-#### Установка 📥
+* **☁️ Weather Forecasting:** Load historical weather data (temperature, humidity, pressure) to predict the probability of rain tomorrow.
+* **🧑‍🎓 Education:** Analyze student performance data to forecast the probability of achieving a high grade on an upcoming exam.
+* **📈 Business Success:** Evaluate market data and predict the probability of a new startup's success.
 
-Для установки приложения клонируйте репозиторий:
+-----
+
+### Getting Started ▶️
+
+#### Installation 📥
+
+To install the application, clone the repository:
 
 ```bash
 git clone https://github.com/Birewon/PredictiveAnalyticsApp.git
 cd PredictiveAnalyticsApp
 ```
 
-Затем установите все необходимые зависимости с помощью pip:
+Then install all required dependencies using pip:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### Запуск приложения 🚀
+#### Launching the Application 🚀
 
-После установки зависимостей запустите приложение из корневой директории проекта:
+After installing the dependencies, launch the application from the project's root directory:
 
 ```bash
 python main.py
@@ -57,45 +57,44 @@ python main.py
 
 -----
 
-### Дорожная карта 🗺️
+### Roadmap 🗺️
 
-Ниже представлен обзор текущего статуса и планов на будущее для PredictiveAnalyticsApp.
+Below is an overview of the current status and future plans for PredictiveAnalyticsApp.
 
-#### Что уже реализовано:
+#### Already Implemented:
 
-  * ✅ **Загрузка CSV-файлов:** Возможность загружать один или два файла `.csv` в приложение.
-  * ✅ **Выбор директории для сохранения:** Функциональность для выбора директории, куда будут сохраняться обработанные файлы.
-  * ✅ **Базовая конкатенация CSV:** Объединение двух загруженных `.csv` файлов в один выходной файл.
-  * ✅ **Отчеты о статусе:** Отображение обновлений в реальном времени и сообщений об ошибках в пользовательском интерфейсе.
+* ✅ **CSV File Loading:** Ability to load one or two `.csv` files into the application.
+* ✅ **Select Save Directory:** Functionality to choose the directory where processed files will be saved.
+* ✅ **Basic CSV Concatenation:** Merge two uploaded `.csv` files into one output file.
+* ✅ **Status Reports:** Display real-time updates and error messages in the user interface.
 
-#### Планируемые функции:
+#### Planned Features:
 
-  * ⏳ **Расширенная предобработка CSV:**
-      * Сортировка данных по выбранным столбцам.
-      * Слияние/объединение CSV-файлов на основе общих столбцов (типы объединения: `inner`, `outer`, `left`, `right`).
-      * Выбор и удаление столбцов.
-      * Обработка пропущенных значений (импутация, удаление строк/столбцов).
-  * ⏳ **Интерфейс для построения предиктивных моделей:**
-      * Выбор целевых (зависимых) и признаковых (независимых) переменных.
-      * Выбор распространенных алгоритмов машинного обучения (например, Линейная регрессия, Логистическая регрессия, Деревья решений).
-      * Настройка разделения данных на обучающую и тестовую выборки.
-  * ⏳ **Оценка и визуализация моделей:**
-      * Отображение метрик производительности модели (например, точность, полнота, F1-мера, R-квадрат).
-      * Визуализации для распределения данных и прогнозов модели.
-  * ⏳ **Сохранение/загрузка моделей:** Возможность сохранять обученные модели для дальнейшего использования и загружать предварительно обученные модели.
-  * ⏳ **Интерактивная визуализация данных:** Базовые графики (гистограммы, диаграммы рассеяния) загруженных данных.
-
------
-
-### Создано с использованием 💻
-
-  * **🐍 Python:** Основной язык программирования.
-  * **🎨 PyQt5:** Для создания графического пользовательского интерфейса.
-  * **🐼 pandas:** Для эффективной обработки и манипулирования данными `.csv`.
-  * **🤖 scikit-learn:** Для реализации различных алгоритмов предиктивного моделирования.
+* ⏳ **Advanced CSV Preprocessing:**
+    * Sort data by selected columns.
+    * Merge/join CSV files based on common columns (join types: `inner`, `outer`, `left`, `right`).
+    * Select and remove columns.
+    * Handle missing values (imputation, deletion of rows/columns).
+* ⏳ **Predictive Model Building Interface:**
+    * Selection of target (dependent) and feature (independent) variables.
+    * Choice of common machine learning algorithms (e.g., Linear Regression, Logistic Regression, Decision Trees).
+    * Configuration of train-test data split.
+* ⏳ **Model Evaluation and Visualization:**
+    * Display of model performance metrics (e.g., accuracy, recall, F1-score, R-squared).
+    * Visualizations for data distribution and model predictions.
+* ⏳ **Interactive Data Visualization:** Basic plots (histograms, scatter plots) of uploaded data.
 
 -----
 
-### Вклад в проект 🤝
+### Built With 💻
 
-Мы приветствуем идеи и предложения\! Если у вас есть какие-либо замечания или вы хотите внести свой вклад, пожалуйста, создайте [Issue](https://github.com/Birewon/PredictiveAnalyticsApp/issues) или [Pull Request](https://github.com/Birewon/PredictiveAnalyticsApp/pulls) на GitHub.
+* **🐍 Python:** The primary programming language.
+* **🎨 PyQt5:** For creating the graphical user interface.
+* **🐼 pandas:** For efficient processing and manipulation of `.csv` data.
+* **🤖 scikit-learn:** For implementing various predictive modeling algorithms.
+
+-----
+
+### Contributing 🤝
+
+The application welcomes ideas and suggestions! If you have any feedback or would like to contribute, please create an [Issue](https://github.com/Birewon/PredictiveAnalyticsApp/issues) or [Pull Request](https://github.com/Birewon/PredictiveAnalyticsApp/pulls) on GitHub.

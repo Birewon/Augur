@@ -13,4 +13,3 @@ zope.interface==7.2
 
 
 # For downloading thats requirements: "pip install -r requirements.txt"
-# Delete this text
