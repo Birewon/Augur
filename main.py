@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
 import pandas as pd
-from src.CSVeditor.gui import Ui_MainWindow
-from src.UI_logic import UICallbacks
+from src.raw.gui import Ui_MainWindow
+from src.csv_editor.UI_logic import UICallbacks
 
 
 # =====================================================
@@ -92,40 +92,33 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.merge_btn.clicked.connect(self.callbacks.merge)
 
     # Functions working with globals variables
-    def add_df(self, num_of_file: int, new_df: pd.DataFrame):
+    def add_path(self, num_of_file: int, new_path: str):
             """
-            Adding the path to the file to path_df.
+            Adding the path to the file to path variable.
             Validating addition first and second files
 
             params:
 
-            new_path: str -> New path for addition to path_df
+            new_path: str -> New path for addition to path variable
             """
-            if self.csv_path_1 and self.csv_path_2: # Validating of max. files
-                self.csv_path_1 = ""
-                self.csv_path_2 = ""
-                return {
-                    "msg": "Error! Maximum files",
-                    "status": 0
-                }
+            # if self.csv_path_1 and self.csv_path_2: # Validating of max. files
+            #     self.csv_path_1 = ""
+            #     self.csv_path_2 = ""
+            #     print("[Warning]: There are too many files, please select all files again")
+            #     return 0
             #==========Add new path to 1/2 file===========#
-            if num_of_file == 1:
-                self.csv_path_1 = new_df
-                return {
-                    "msg": f"The first file was selected: {new_df}",
-                    "status": 1
-                }
-            elif num_of_file == 2:
-                self.csv_path_2 = new_df
-                return {
-                    "msg": f"The second file was selected: {new_df}",
-                    "status": 1
-                }
-            else:
-                return {
-                     "msg": "add_df [ERROR]: Unknown error",
-                     "status": 0
-                }
+            try:
+                if num_of_file == 1:
+                    self.csv_path_1 = new_path
+                    print(f'[INFO]: Successfully! The FIRST file ({new_path}) has been added.')
+                    return 1
+                elif num_of_file == 2:
+                    self.csv_path_2 = new_path
+                    print(f'[INFO]: Successfully! The SECOND file ({new_path}) has been added.')
+                    return 1
+            except Exception as ex:
+                 print(f'[ERROR]: {ex}')
+                 return 0
 
     def set_output_path(self, output_path: str):
             """
@@ -133,14 +126,6 @@ class mywindow(QtWidgets.QMainWindow):
             """
             self.csv_output_path = output_path
             return output_path
-
-    def update_response_text(self, response_text: str):
-            """
-            Adding response text
-            """
-            self.RESPONSE_TEXT += response_text + "\n"
-            return self.RESPONSE_TEXT
-
 
 ## =====================================================
 # === DEFAULT ===

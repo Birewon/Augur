@@ -1,17 +1,22 @@
 import pandas as pd
 from PyQt5 import QtWidgets, QtCore, Qt
 from PyQt5.QtWidgets import QFileDialog, QListWidget
-from src.data_processing import DataProcessing
+from src.csv_editor.data_processing import DataProcessing
 
 
-# The class working with UI
+# =====================================================
+# === WORKING WITH UI ===
+# =====================================================
+
 class UICallbacks:
-    """
-    This class working with UI
-    """
+
+    # SETTINGS
     def __init__(self, main_window_instance):
         self.main_window = main_window_instance
         self.data_processor = DataProcessing()
+
+    # ---------------------------------------------------------
+    # ATTACHING FILES (WORKING)
 
     def _populate_list_wiget(self, list_wiget: QtWidgets.QListWidget, columns: list[str]):
         """
@@ -26,73 +31,61 @@ class UICallbacks:
     def attach_file_1(self):
         dialog = QFileDialog(self.main_window)
         dialog.setFileMode(QFileDialog.FileMode.AnyFile)
-        # dialog.setNameFilter("*.csv")
+        dialog.setNameFilter("*.csv")
         if dialog.exec_():
             fileName = dialog.selectedFiles()
             if fileName:
-                new_path = fileName # ["/home/file.csv"]
-                new_df = self.data_processor.read_csv_file(new_path[0])
+                new_path = fileName[0] # ["/home/file.csv"]
                 try:
-                    response = self.main_window.add_df(new_df.get("msg"))
+                    response = self.main_window.add_path(num_of_file=1, new_path=new_path)
                 except Exception as ex:
-                    self.main_window.update_response_text(f"[ERROR]: {ex}")
-                    self.print_status_text()
+                    print(f'[ERROR]: {ex}')
                     return
-                if response.get("status") == 1:
-                    self.main_window.ui.path_text_1.setPlainText(new_path[0])
+                if response:
+                    self.main_window.ui.path_text_1.setPlainText(new_path)
                     self.main_window.ui.listWidget_1.clear()
-                    df = pd.read_csv(new_path[0],
+                    df = pd.read_csv(new_path,
                                     sep=',',
                                     header=0,
                                     na_values=['', 'N/A'])
                     csv_columns = list(df.columns)
                     self._populate_list_wiget(self.main_window.ui.listWidget_1, csv_columns)
-                else:
-                    self.main_window.ui.path_text_1.setPlainText(response.get("msg"))
 
     def attach_file_2(self):
         dialog = QFileDialog(self.main_window)
         dialog.setFileMode(QFileDialog.FileMode.AnyFile)
-        # dialog.setNameFilter("*.csv")
+        dialog.setNameFilter("*.csv")
         if dialog.exec_():
             fileName = dialog.selectedFiles()
             if fileName:
-                new_path = fileName
-                new_df = self.data_processor.read_csv_file(new_path[0])
+                new_path = fileName[0] # ["/home/file.csv"]
                 try:
-                    response = self.main_window.add_df(new_df.get("msg"))
+                    response = self.main_window.add_path(num_of_file=2, new_path=new_path)
                 except Exception as ex:
-                    self.main_window.update_response_text(f"[ERROR]: {ex}")
-                    self.print_status_text()
+                    print(f'[ERROR]: {ex}')
                     return
-                if response.get("status") == 1:
-                    self.main_window.ui.path_text_2.setPlainText(new_path[0])
+                if response:
+                    self.main_window.ui.path_text_2.setPlainText(new_path)
                     self.main_window.ui.listWidget_2.clear()
-                    df = pd.read_csv(new_path[0],
+                    df = pd.read_csv(new_path,
                                     sep=',',
                                     header=0,
                                     na_values=['', 'N/A'])
                     csv_columns = list(df.columns)
                     self._populate_list_wiget(self.main_window.ui.listWidget_2, csv_columns)
-                else:
-                    self.main_window.ui.path_text_2.setPlainText(response.get("msg"))
+
+    # ---------------------------------------------------------
+    # SELECTING OUTPUT PATH (WORKING)
 
     def output_pth(self):
-        dir_name = QFileDialog.getExistingDirectory(self.main_window, "Select a Directory")
-        output_path = str(dir_name)
-        if output_path:
-            if len(self.main_window.dfs)<=2:
-                self.main_window.ui.path_text_3.setPlainText(output_path)
-                self.main_window.set_output_path(output_path)
-                return
-            else:
-                self.main_window.dfs.clear()
-                self.main_window.update_response_text("[ATTENTION]: maximum number of files execeeded! The memory has been reset!")
-                self.main_window.set_output_path(output_path)
-                self.print_status_text()
-                return
-        self.main_window.update_response_text(f"[ERROR]: output_path: {output_path}")
-        self.print_status_text()
+        output_dir = QFileDialog.getExistingDirectory(self.main_window, "Select a Directory")
+        if output_dir:
+            self.main_window.ui.path_text_3.setPlainText(output_dir)
+            self.main_window.set_output_path(output_dir)
+            print(f'[INFO]: Successfully! The OUTPUT directory ({output_dir}) has been added.')
+
+    # ---------------------------------------------------------
+    # CONCATING
 
     def concat(self):
         try:
@@ -105,7 +98,10 @@ class UICallbacks:
             self.main_window.update_response_text(f"[ERROR]: {ex}")
             self.print_status_text()
 
-    def check_columns_bar(self, list_widget: QtWidgets.QListWidget):
+    # ---------------------------------------------------------
+    # SORTING
+
+    def _check_columns_bar(self, list_widget: QtWidgets.QListWidget):
         checked_list = []
         for i in range(list_widget.count()):
             item = list_widget.item(i)
@@ -115,7 +111,7 @@ class UICallbacks:
 
     def sort(self):
         df = self.main_window.dfs[0] # take first df
-        columns = self.check_columns_bar(self.main_window.ui.listWidget_1) # get columns from df
+        columns = self._check_columns_bar(self.main_window.ui.listWidget_1) # get columns from df
         output_path = self.main_window.OUTPUT_PATH # get output path
         new_df = DataProcessing.sort_df(self.data_processor, df=df, by=columns, how_ascending=True) # SORT!!!!
         if new_df.get("status") == 1: # if SORT if OK
@@ -132,6 +128,9 @@ class UICallbacks:
         else: # if SORT isn't OK
             self.main_window.update_response_text(new_df.get("msg"))
             self.print_status_text()
+
+    # ---------------------------------------------------------
+    # MERGING
 
     def merge(self):
         '''
@@ -193,6 +192,3 @@ class UICallbacks:
             save_response = DataProcessing.save_dataframe_to_csv(self.data_processor, df=merge_response, output_full_path=output_path, filename=filename)
             self.main_window.update_response_text(save_response.get('msg'))
         self.print_status_text()
-
-    def print_status_text(self):
-        self.main_window.ui.status_text.setPlainText(self.main_window.RESPONSE_TEXT)
