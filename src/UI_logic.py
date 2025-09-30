@@ -1,8 +1,7 @@
 import pandas as pd
 from PyQt5 import QtWidgets, QtCore, Qt
 from PyQt5.QtWidgets import QFileDialog, QListWidget
-
-from data_processing import DataProcessing
+from src.data_processing import DataProcessing
 
 
 # The class working with UI
@@ -13,7 +12,7 @@ class UICallbacks:
     def __init__(self, main_window_instance):
         self.main_window = main_window_instance
         self.data_processor = DataProcessing()
- 
+
     def _populate_list_wiget(self, list_wiget: QtWidgets.QListWidget, columns: list[str]):
         """
         Supporting function for populate list wiget

@@ -1,21 +1,63 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
 import pandas as pd
-from CSVeditor.gui import Ui_MainWindow
-from UI_logic import UICallbacks
+from src.CSVeditor.gui import Ui_MainWindow
+from src.UI_logic import UICallbacks
+
+
+# =====================================================
+# === APP SETTINGS===
+# =====================================================
 
 # os.environ["QT_SCALE_FACTOR"] = "2"
 os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 # QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 
+
+# =====================================================
+# === MAIN ===
+# =====================================================
+
+# === Redirecting print ===
+class Output(QtCore.QObject):
+    # 1. Redirecting print
+    newText = QtCore.pyqtSignal(str)
+    def write(self, text):
+         self.newText.emit(str(text))
+    # 2. STATIC METHOD! Logging uncaught exceptions
+    @staticmethod
+    def log_uncaught_exceptions(ex_cls, ex, tb):
+        '''
+        ex_cls - an instance of a exception_type class
+        ex - error text
+        tb - error traceback
+        '''
+        text = f'{ex_cls.__name__}: {ex}:\n'
+        import traceback
+        text += ''.join(traceback.format_tb(tb))
+        print(text) # to status_text
+        QMessageBox.critical(None, 'Critical Error', text)
+        quit()
+sys.excepthook = Output.log_uncaught_exceptions
+
+# === The heart ===
 class mywindow(QtWidgets.QMainWindow):
     def __init__(self):
+
+        # DEFAULT
         super(mywindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # --------------------------------
+        # CREATING AN INSTANCE OF A UI CLASS
+
         self.callbacks = UICallbacks(self)
+
+        # --------------------------------
+        # MAIN VARIABLES
 
         self.csv_path_1 = ""
         self.csv_path_2 = ""
@@ -29,7 +71,18 @@ class mywindow(QtWidgets.QMainWindow):
         self.parameter_how = ""
         self.parameter_index = ""
 
-        self.RESPONSE_TEXT = ""
+        # --------------------------------
+        # REDIRECTING PRINT AND WARNINGS TO status_text
+
+        stdout_stream = Output()
+        stderr_stream = Output()
+        sys.stdout = stdout_stream
+        sys.stderr = stderr_stream
+        stdout_stream.newText.connect(self.ui.status_text.appendPlainText)
+        stderr_stream.newText.connect(self.ui.status_text.appendPlainText)
+
+        # --------------------------------
+        # CONNECTING BUTTONS
 
         self.ui.attach_btn_1.clicked.connect(self.callbacks.attach_file_1)
         self.ui.attach_btn_2.clicked.connect(self.callbacks.attach_file_2)
@@ -74,7 +127,6 @@ class mywindow(QtWidgets.QMainWindow):
                      "status": 0
                 }
 
-
     def set_output_path(self, output_path: str):
             """
             Saving output path
@@ -89,6 +141,10 @@ class mywindow(QtWidgets.QMainWindow):
             self.RESPONSE_TEXT += response_text + "\n"
             return self.RESPONSE_TEXT
 
+
+## =====================================================
+# === DEFAULT ===
+# =====================================================
 
 def main():
     app = QtWidgets.QApplication([])
