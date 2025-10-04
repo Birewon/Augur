@@ -1,7 +1,9 @@
 import pandas as pd
+from PyQt5.QtCore import QThread, QObject
 from PyQt5 import QtWidgets, QtCore, Qt
 from PyQt5.QtWidgets import QFileDialog, QListWidget
 from src.csv_editor.data_processing import DataProcessing
+from .concat import ConcatWorker
 
 
 # =====================================================
@@ -14,7 +16,8 @@ class UICallbacks:
     def __init__(self, main_window_instance):
         self.main_window = main_window_instance
         self.data_processor = DataProcessing()
-
+        self.concat_thread = None
+        self.concat_worker = None
     # ---------------------------------------------------------
     # ATTACHING FILES (WORKING)
 
@@ -85,18 +88,24 @@ class UICallbacks:
             print(f'[INFO]: Successfully! The OUTPUT directory ({output_dir}) has been added.')
 
     # ---------------------------------------------------------
-    # CONCATING
+    # CONCATING (WORKING)
 
     def concat(self):
-        try:
-            file_1 = self.main_window.dfs[0]
-            file_2 = self.main_window.dfs[1]
-            response = self.data_processor.concat_files(file_1, file_2, output_path=self.main_window.OUTPUT_PATH, filename=self.main_window.ui.name_of_output_file_plain_text_1.toPlainText())
-            self.main_window.update_response_text(response.get("msg"))
-            self.print_status_text()
-        except ValueError as ex:
-            self.main_window.update_response_text(f"[ERROR]: {ex}")
-            self.print_status_text()
+        params = self.main_window.get_concat_params()
+
+        self.concat_thread = QThread()
+
+        self.concat_worker = ConcatWorker(**params)
+        self.concat_worker.moveToThread(self.concat_thread)
+
+        self.concat_thread.started.connect(self.concat_worker.start_concatenation)
+        self.concat_worker.status_update.connect(self.main_window.ui.status_text.appendPlainText)
+
+        self.concat_worker.finished.connect(self.concat_thread.quit)
+        self.concat_worker.finished.connect(self.concat_worker.deleteLater)
+        self.concat_thread.finished.connect(self.concat_thread.deleteLater)
+
+        self.concat_thread.start()
 
     # ---------------------------------------------------------
     # SORTING

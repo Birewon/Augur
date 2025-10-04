@@ -2,7 +2,6 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
-import pandas as pd
 from src.raw.gui import Ui_MainWindow
 from src.csv_editor.UI_logic import UICallbacks
 
@@ -62,10 +61,6 @@ class mywindow(QtWidgets.QMainWindow):
         self.csv_path_1 = ""
         self.csv_path_2 = ""
         self.csv_output_path = ""
-        self.csv_output_name = ""
-
-        self.list_widget_csv_1 = None
-        self.list_widget_csv_2 = None
 
         self.parameter_on = ""
         self.parameter_how = ""
@@ -126,6 +121,18 @@ class mywindow(QtWidgets.QMainWindow):
             """
             self.csv_output_path = output_path
             return output_path
+
+    def get_concat_params(self):
+        params = {
+            'pth_1': self.csv_path_1,
+            'pth_2': self.csv_path_2,
+            'output_pth': self.csv_output_path,
+            'output_name': self.ui.name_of_output_file_plain_text_1.toPlainText(),
+            'list_widget_csv_1': self.ui.listWidget_1,
+            'list_widget_csv_2': self.ui.listWidget_2,
+        }
+        return params
+
 
 ## =====================================================
 # === DEFAULT ===
