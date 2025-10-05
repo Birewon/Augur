@@ -1,9 +1,10 @@
 import pandas as pd
-from PyQt5.QtCore import QThread, QObject
+from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, QtCore, Qt
 from PyQt5.QtWidgets import QFileDialog, QListWidget
 from src.csv_editor.data_processing import DataProcessing
 from .concat import ConcatWorker
+from .sort import SortWorker
 
 
 # =====================================================
@@ -108,35 +109,24 @@ class UICallbacks:
         self.concat_thread.start()
 
     # ---------------------------------------------------------
-    # SORTING
-
-    def _check_columns_bar(self, list_widget: QtWidgets.QListWidget):
-        checked_list = []
-        for i in range(list_widget.count()):
-            item = list_widget.item(i)
-            if item.checkState() == QtCore.Qt.Checked:
-                checked_list.append(item.text())
-        return checked_list
+    # SORTING (WORKING)
 
     def sort(self):
-        df = self.main_window.dfs[0] # take first df
-        columns = self._check_columns_bar(self.main_window.ui.listWidget_1) # get columns from df
-        output_path = self.main_window.OUTPUT_PATH # get output path
-        new_df = DataProcessing.sort_df(self.data_processor, df=df, by=columns, how_ascending=True) # SORT!!!!
-        if new_df.get("status") == 1: # if SORT if OK
-            status_text = "Successfuly!" # Logging
-            self.main_window.update_response_text(status_text) # Logging
-            self.print_status_text() # Logging
-            message = DataProcessing.save_dataframe_to_csv(self.data_processor, df=new_df.get("msg"), output_full_path=output_path, filename=self.main_window.ui.name_of_output_file_plain_text_1.toPlainText()) # SAVING NEW DF TO CSV !!
-            if message.get("status") == 1:
-                result_text = f"The file: {message.get("filename")} has sorted and saved in {output_path}" # Logging
-                self.main_window.update_response_text(result_text) # Logging
-            else:
-                self.main_window.update_response_text(message.get("msg"))
-            self.print_status_text()
-        else: # if SORT isn't OK
-            self.main_window.update_response_text(new_df.get("msg"))
-            self.print_status_text()
+        params = self.main_window.get_sort_params()
+
+        self.sort_thread = QThread()
+
+        self.sort_worker = SortWorker(**params)
+        self.sort_worker.moveToThread(self.sort_thread)
+
+        self.sort_thread.started.connect(self.sort_worker.start_sorting)
+        self.sort_worker.status_update.connect(self.main_window.ui.status_text.appendPlainText)
+
+        self.sort_worker.finished.connect(self.sort_thread.quit)
+        self.sort_worker.finished.connect(self.sort_worker.deleteLater)
+        self.sort_thread.finished.connect(self.sort_thread.deleteLater)
+
+        self.sort_thread.start()
 
     # ---------------------------------------------------------
     # MERGING

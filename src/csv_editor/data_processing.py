@@ -87,7 +87,7 @@ class DataProcessing:
     def sort_df(self, df: pd.DataFrame, by: list[str], how_ascending: bool | None = True):
         try:
             print(by)
-            new_df = df.sort_values(by, ascending=how_ascending)
+            new_df = df.sort_values(by, ascending=how_ascending, )
             return {
                  "status": 1,
                  "msg": new_df
@@ -110,7 +110,7 @@ class DataProcessing:
             #     df2 = pd.read_csv(right_df, usecols=csv_columns_1)
             #     return df2
 
-            
+
             # print(left_df)
             # print("===")
             # print(right_df)

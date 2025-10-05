@@ -43,12 +43,12 @@ class ConcatWorker(QObject):
 
     @pyqtSlot()
     def start_concatenation(self):
-        self.status_update.emit('CONCATENATION STARTING')
-
-        csv_columns_1 = self._extract_columns(self.list_widget_csv_1)
-        csv_columns_2 = self._extract_columns(self.list_widget_csv_2)
+        self.status_update.emit('STARTING CONCATENATION')
 
         try:
+            csv_columns_1 = self._extract_columns(self.list_widget_csv_1)
+            csv_columns_2 = self._extract_columns(self.list_widget_csv_2)
+
             self._concat(
                 self.pth_1,
                 csv_columns_1,
@@ -59,10 +59,10 @@ class ConcatWorker(QObject):
                 self.output_pth,
                 self.output_name
             )
+            self.status_update.emit('SUCCESSFULY CONCATENATION')
         except Exception as ex:
             self.status_update.emit(f'[ERROR]: {ex}')
 
-        self.status_update.emit('SUCCESSFULY CONCATENATION')
         self.finished.emit()
 
     # ---------------------------------------------------------

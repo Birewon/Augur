@@ -133,6 +133,24 @@ class mywindow(QtWidgets.QMainWindow):
         }
         return params
 
+    def get_sort_params(self):
+        ascending = self.ui.how_plain_text_1.toPlainText()
+
+        if ascending.lower() == 'true':
+             ascending = True
+        elif ascending.lower() == 'false':
+             ascending = False
+        else:
+             ascending = True
+
+        params = {
+            'path_to_csv': self.csv_path_1,
+            'list_widget_columns': self.ui.listWidget_1,
+            'how_ascending': ascending,
+            'output_path': self.csv_output_path,
+            'output_name': self.ui.name_of_output_file_plain_text_1.toPlainText(),
+        }
+        return params
 
 ## =====================================================
 # === DEFAULT ===
