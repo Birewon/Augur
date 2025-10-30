@@ -41,6 +41,12 @@ git clone https://github.com/Birewon/PredictiveAnalyticsApp.git
 cd PredictiveAnalyticsApp
 ```
 
+Then create your own virtual environment (not necessary):
+
+```bash
+python3 -m venv .venv
+```
+
 Then install all required dependencies using pip:
 
 ```bash
@@ -52,7 +58,7 @@ pip install -r requirements.txt
 After installing the dependencies, launch the application from the project's root directory:
 
 ```bash
-python main.py
+python3 main.py
 ```
 
 -----
