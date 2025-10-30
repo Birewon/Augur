@@ -45,6 +45,7 @@ class SortWorker(QObject):
 
         try:
             by_columns = self._extract_columns(self.list_widget_columns)
+
             self._sort(
                 path=self.path_to_csv,
                 output_path=self.output_path,
@@ -70,6 +71,16 @@ class SortWorker(QObject):
         return columns
 
     def _sort(self, path: str, output_path: str, output_name: str, by: list, ascending: bool):
+
+        if not path:
+            raise ValueError('Please, select the FIRST CSV FILE and try again')
+        if not output_name:
+            raise ValueError('Please, set the NAME of the result file and try again')
+        if not output_path:
+            raise ValueError('Please, set the OUTPUT PATH of the result file and try again')
+        if output_name[-4:] != '.csv':
+            output_name += '.csv'
+
         df = pd.read_csv(path)
         full_path = output_path + '/' + output_name
         if isinstance(by, list):

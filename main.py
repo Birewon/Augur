@@ -62,9 +62,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.csv_path_2 = ""
         self.csv_output_path = ""
 
-        self.parameter_on = ""
-        self.parameter_how = ""
-        self.parameter_index = ""
+        # self.parameter_on = ""
+        # self.parameter_how = ""
+        # self.parameter_index = ""
 
         # --------------------------------
         # REDIRECTING PRINT AND WARNINGS TO status_text
@@ -149,6 +149,29 @@ class mywindow(QtWidgets.QMainWindow):
             'how_ascending': ascending,
             'output_path': self.csv_output_path,
             'output_name': self.ui.name_of_output_file_plain_text_1.toPlainText(),
+        }
+        return params
+
+    def get_merge_params(self):
+        index = self.ui.index_plain_text_1.toPlainText()
+
+        if index.lower() == 'false':
+            index = False
+        else:
+            index = True
+
+        params = {
+            'pth_1': self.csv_path_1,
+            'pth_2': self.csv_path_2,
+            'list_widget_csv_1': self.ui.listWidget_1,
+            'is_selected_all_1': self.ui.select_all_1.isChecked(),
+            'list_widget_csv_2': self.ui.listWidget_2,
+            'is_selected_all_2': self.ui.select_all_2.isChecked(),
+            'on': self.ui.on_plain_text_1.toPlainText(),
+            'how': self.ui.how_plain_text_1.toPlainText(),
+            'index': index,
+            'output_pth': self.csv_output_path,
+            'output_name': self.ui.name_of_output_file_plain_text_1.toPlainText()
         }
         return params
 

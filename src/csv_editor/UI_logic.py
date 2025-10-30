@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QFileDialog, QListWidget
 from src.csv_editor.data_processing import DataProcessing
 from .concat import ConcatWorker
 from .sort import SortWorker
+from .merge import MergeWorker
 
 
 # =====================================================
@@ -96,17 +97,17 @@ class UICallbacks:
 
         self.concat_thread = QThread()
 
-        self.concat_worker = ConcatWorker(**params)
-        self.concat_worker.moveToThread(self.concat_thread)
+        self.concat_worker = ConcatWorker(**params) # makes an object of ConcatWorker
+        self.concat_worker.moveToThread(self.concat_thread) # moves concat_worker (object) into concat_thread (thread)
 
-        self.concat_thread.started.connect(self.concat_worker.start_concatenation)
-        self.concat_worker.status_update.connect(self.main_window.ui.status_text.appendPlainText)
+        self.concat_thread.started.connect(self.concat_worker.start_concatenation) # start concatination
+        self.concat_worker.status_update.connect(self.main_window.ui.status_text.appendPlainText) # connects status_update method with status_text field
 
-        self.concat_worker.finished.connect(self.concat_thread.quit)
+        self.concat_worker.finished.connect(self.concat_thread.quit) # if the thread finished
         self.concat_worker.finished.connect(self.concat_worker.deleteLater)
         self.concat_thread.finished.connect(self.concat_thread.deleteLater)
 
-        self.concat_thread.start()
+        self.concat_thread.start() # start the thread
 
     # ---------------------------------------------------------
     # SORTING (WORKING)
@@ -132,62 +133,21 @@ class UICallbacks:
     # MERGING
 
     def merge(self):
-        '''
-        Merging two DataFrames (by(parameter=on) identical columns)
-        how parameter - any value from:
 
-            "inner" (default) - final DataFrame includes ONLY those lines
-                that have matches in both DataFrames.
+        params = self.main_window.get_merge_params()
 
-            "left" - final DataFrame includes all lines from first DataFrame and
-                the corresponding lines from the second DataFrame. Empty cells = NaN.
+        self.merge_thread = QThread()
 
-            "right" - final DataFrame includes all lines from second DataFrame and
-                the corresponding lines from the first DataFrame. Empty cells = NaN.
+        self.merge_worker = MergeWorker(**params)
+        self.merge_worker.moveToThread(self.merge_thread)
 
-            "outer" - final DataFrame includes all lines from both DataFrames and
-                the Empty cells = NaN.
+        self.merge_thread.started.connect(self.merge_worker.start_merge)
+        self.merge_worker.status_update.connect(self.main_window.ui.status_text.appendPlainText)
 
-        on parameter - can take "str" or [list] values. Final DataFrame will be sorted
-            by identical name(s) of column(s).
+        self.merge_worker.finished.connect(self.merge_thread.quit)
+        self.merge_worker.finished.connect(self.merge_worker.deleteLater)
+        self.merge_thread.finished.connect(self.merge_thread.deleteLater)
 
-        DON'T WORKING:
-        right_on/left_on parametr - merging two DataFrames by two not identical columns
-        '''
+        self.merge_thread.start()
 
-        def iterate_selected_columns(list_widget: QListWidget) -> list[str]:
-            csv_columns = []
-            for index in range(list_widget.count()):
-                if list_widget.item(index).checkState() == Qt.Checked:
 
-                    print(f'[LOG]: {list_widget.item(index).text()} = 1')
-
-                    csv_columns.append(index)
-                else:
-                    print(f'[LOG]: {list_widget.item(index).text()} = 0')
-
-            return csv_columns
-
-        try:
-            csv_columns_1 = iterate_selected_columns(self.main_window.ui.listWidget_1)
-            csv_columns_2 = iterate_selected_columns(self.main_window.ui.listWidget_2)
-
-            print(f'[LOG]: {csv_columns_1} +\n+ {csv_columns_2}')
-
-            df1 = self.main_window.dfs[0]
-            df2 = self.main_window.dfs[1]
-            output_path = self.main_window.OUTPUT_PATH
-            filename = self.main_window.ui.name_of_output_file_plain_text_1.toPlainText()
-            how = self.main_window.ui.how_plain_text_1.toPlainText()
-            on = self.main_window.ui.on_plain_text_1.toPlainText()
-        except Exception as ex:
-            self.main_window.update_response_text(f"merge [ERROR]: {ex}\n{df1}\n{df2}\n{output_path}\n{filename}")
-            self.print_status_text()
-            return
-        merge_response = DataProcessing.merge_dfs(self.data_processor, left_df=df1, right_df=df2, csv_columns_1=csv_columns_1, csv_columns_2=csv_columns_2, merge_how=how, merge_on=on)
-        if isinstance(merge_response, str):
-            self.main_window.update_response_text(merge_response)
-        elif isinstance(merge_response, pd.DataFrame):
-            save_response = DataProcessing.save_dataframe_to_csv(self.data_processor, df=merge_response, output_full_path=output_path, filename=filename)
-            self.main_window.update_response_text(save_response.get('msg'))
-        self.print_status_text()
