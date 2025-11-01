@@ -44,7 +44,7 @@ cd PredictiveAnalyticsApp
 Then create your own virtual environment (not necessary):
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 ```
 
 Then install all required dependencies using pip:
@@ -55,11 +55,26 @@ pip install -r requirements.txt
 
 #### Launching the Application 🚀
 
-After installing the dependencies, launch the application from the project's root directory:
+After installing the dependencies, launch the application from the project's root directory (python version 3.12+):
 
 ```bash
-python3 main.py
+python3.12 main.py
 ```
+
+OR
+
+You also may try this:
+
+#### Launching the Application via run.sh
+
+You should make the file executable:
+
+```bash
+chmod +x ./run.sh
+source ./run.sh
+```
+
+IF YOU HAVE ANY PROBLEMS WITH INSTALLATION YOU CAN ASK THEM HERE: [Issue](https://github.com/Birewon/PredictiveAnalyticsApp/issues)
 
 -----
 
@@ -94,7 +109,7 @@ Below is an overview of the current status and future plans for PredictiveAnalyt
 
 ### Built With 💻
 
-* **🐍 Python:** The primary programming language.
+* **🐍 Python3.12:** The primary programming language.
 * **🎨 PyQt5:** For creating the graphical user interface.
 * **🐼 pandas:** For efficient processing and manipulation of `.csv` data.
 * **🤖 scikit-learn:** For implementing various predictive modeling algorithms.
