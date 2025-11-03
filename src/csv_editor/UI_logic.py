@@ -2,7 +2,6 @@ import pandas as pd
 from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, QtCore, Qt
 from PyQt5.QtWidgets import QFileDialog, QListWidget
-from src.csv_editor.data_processing import DataProcessing
 from .concat import ConcatWorker
 from .sort import SortWorker
 from .merge import MergeWorker
@@ -17,7 +16,6 @@ class UICallbacks:
     # SETTINGS
     def __init__(self, main_window_instance):
         self.main_window = main_window_instance
-        self.data_processor = DataProcessing()
         self.concat_thread = None
         self.concat_worker = None
     # ---------------------------------------------------------
@@ -149,5 +147,3 @@ class UICallbacks:
         self.merge_thread.finished.connect(self.merge_thread.deleteLater)
 
         self.merge_thread.start()
-
-
