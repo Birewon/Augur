@@ -147,3 +147,34 @@ class UICallbacks:
         self.merge_thread.finished.connect(self.merge_thread.deleteLater)
 
         self.merge_thread.start()
+
+    # ---------------------------------------------------------
+    # ADDITIONALS FUNCS
+
+    def select_all_checkbox_1(self):
+
+        list_widget = self.main_window.ui.listWidget_1
+        is_check = self.main_window.ui.select_all_1.checkState()
+
+        if is_check:
+            for index in range(list_widget.count()):
+                column = list_widget.item(index)
+                column.setCheckState(QtCore.Qt.Checked)
+        else:
+            for index in range(list_widget.count()):
+                column = list_widget.item(index)
+                column.setCheckState(QtCore.Qt.Unchecked)
+
+    def select_all_checkbox_2(self):
+
+        list_widget = self.main_window.ui.listWidget_2
+        is_check = self.main_window.ui.select_all_2.checkState()
+
+        if is_check:
+            for index in range(list_widget.count()):
+                column = list_widget.item(index)
+                column.setCheckState(QtCore.Qt.Checked)
+        else:
+            for index in range(list_widget.count()):
+                column = list_widget.item(index)
+                column.setCheckState(QtCore.Qt.Unchecked)
