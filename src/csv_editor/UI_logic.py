@@ -1,7 +1,7 @@
 import pandas as pd
 from PyQt5.QtCore import QThread
-from PyQt5 import QtWidgets, QtCore, Qt
-from PyQt5.QtWidgets import QFileDialog, QListWidget
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtWidgets import QFileDialog
 from .concat import ConcatWorker
 from .sort import SortWorker
 from .merge import MergeWorker

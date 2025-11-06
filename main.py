@@ -86,6 +86,8 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.sort_btn.clicked.connect(self.callbacks.sort)
         self.ui.merge_btn.clicked.connect(self.callbacks.merge)
 
+        self.ui.clear_button.clicked.connect(self.ui.status_text.clear)
+
     # Functions working with globals variables
     def add_path(self, num_of_file: int, new_path: str):
             """
