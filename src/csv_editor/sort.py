@@ -18,9 +18,11 @@ class SortWorker(QObject):
     def __init__(
             self,
 
-            path_to_csv: str,
+            path_to_csv_1: str | None,
+            path_to_csv_2: str | None,
 
-            list_widget_columns: QtWidgets.QListWidget,
+            list_widget_columns_1: QtWidgets.QListWidget | None,
+            list_widget_columns_2: QtWidgets.QListWidget | None,
             how_ascending: bool,
 
             output_path: str,
@@ -28,9 +30,11 @@ class SortWorker(QObject):
         ):
         super().__init__()
 
-        self.path_to_csv = path_to_csv
+        self.path_to_csv_1 = path_to_csv_1
+        self.path_to_csv_2 = path_to_csv_2
 
-        self.list_widget_columns = list_widget_columns
+        self.list_widget_columns_1 = list_widget_columns_1
+        self.list_widget_columns_2 = list_widget_columns_2
         self.how_ascending = how_ascending
 
         self.output_path = output_path
@@ -43,20 +47,36 @@ class SortWorker(QObject):
     def start_sorting(self):
         self.status_update.emit('STARTING SORTING')
 
-        try:
-            by_columns = self._extract_columns(self.list_widget_columns)
+        if not self.path_to_csv_1 and not self.path_to_csv_2:
+            self.status_update.emit('[ERROR]: You should add any file!')
+        else:
+            try:
+                if self.path_to_csv_1 and self.list_widget_columns_1:
+                    by_columns_1 = self._extract_columns(self.list_widget_columns_1)
+                if self.path_to_csv_2 and self.list_widget_columns_2:
+                    by_columns_2 = self._extract_columns(self.list_widget_columns_2)
 
-            self._sort(
-                path=self.path_to_csv,
-                output_path=self.output_path,
-                output_name=self.output_name,
-                by=by_columns,
-                ascending=self.how_ascending
-            )
-            self.status_update.emit('SUCCESSFULY SORTING')
+                if by_columns_1:
+                    self._sort(
+                        path=self.path_to_csv_1,
+                        output_path=self.output_path,
+                        output_name=self.output_name+'_1',
+                        by=by_columns_1,
+                        ascending=self.how_ascending
+                    )
+                    self.status_update.emit('FIRST FILE SUCCESSFULY SORTED')
+                if by_columns_2:
+                    self._sort(
+                        path=self.path_to_csv_2,
+                        output_path=self.output_path,
+                        output_name=self.output_name+'_2',
+                        by=by_columns_2,
+                        ascending=self.how_ascending
+                    )
+                    self.status_update.emit('SECOND FILE SUCCESSFULY SORTED')
 
-        except Exception as ex:
-            self.status_update.emit(f'[ERROR]: {ex}')
+            except Exception as ex:
+                self.status_update.emit(f'[ERROR]: {ex}')
 
         self.finished.emit()
 

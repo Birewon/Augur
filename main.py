@@ -149,8 +149,10 @@ class mywindow(QtWidgets.QMainWindow):
              ascending = True
 
         params = {
-            'path_to_csv': self.csv_path_1,
-            'list_widget_columns': self.ui.listWidget_1,
+            'path_to_csv_1': self.csv_path_1,
+            'path_to_csv_2': self.csv_path_2,
+            'list_widget_columns_1': self.ui.listWidget_1,
+            'list_widget_columns_2': self.ui.listWidget_2,
             'how_ascending': ascending,
             'output_path': self.csv_output_path,
             'output_name': self.ui.name_of_output_file_plain_text_1.toPlainText(),
