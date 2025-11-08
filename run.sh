@@ -9,7 +9,9 @@ echo "   \\ \\_\\ \\ \\_\\\\ \\____\\ \\___,_\\ \\_\\ \\_\\ \\ ,__/\\ \\ ,__/";
 echo "    \\/_/  \\/_/ \\/____/\\/__,_ /\\/_/\\/_/\\ \\ \\/  \\ \\ \\/ ";
 echo "                                       \\ \\_\\   \\ \\_\\ ";
 echo "                                        \\/_/    \\/_/ ";
-
+echo "														"
+echo "Created by: Birewon"
+echo ""
 
 if [[ $1 == "--help" ]]; then
 	echo "Help information:"
@@ -75,7 +77,5 @@ else
 	fi
 fi
 
-echo "done!"
-
-echo "Hello! If you have any questions about the program, you can ask them here:"
+echo "If you have any questions about the program, you can ask them here:"
 echo "https://github.com/Birewon/PredictiveAnalyticsApp/issues"
