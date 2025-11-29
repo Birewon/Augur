@@ -4,6 +4,7 @@ import sys
 import os
 from src.raw.gui import Ui_MainWindow
 from src.csv_editor.UI_logic import UICallbacks
+from src.model.UI_model import UIModelCallbacks
 
 
 # =====================================================
@@ -51,9 +52,10 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         # --------------------------------
-        # CREATING AN INSTANCE OF A UI CLASS
+        # CREATING AN INSTANCE OF A UI CLASSES
 
         self.callbacks = UICallbacks(self)
+        self.model_callbacks = UIModelCallbacks(self)
 
         # --------------------------------
         # MAIN VARIABLES
@@ -67,17 +69,31 @@ class mywindow(QtWidgets.QMainWindow):
         # self.parameter_index = ""
 
         # --------------------------------
-        # REDIRECTING PRINT AND WARNINGS TO status_text
+        # MAIN MODEL VARIABLES
 
-        stdout_stream = Output()
-        stderr_stream = Output()
-        sys.stdout = stdout_stream
-        sys.stderr = stderr_stream
-        stdout_stream.newText.connect(self.ui.status_text.appendPlainText)
-        stderr_stream.newText.connect(self.ui.status_text.appendPlainText)
+        self.new_model_path = ""
+        self.output_model_path = ""
+        self.predict_model_path = ""
 
         # --------------------------------
-        # CONNECTING BUTTONS
+        # REDIRECTING PRINT AND WARNINGS TO status_text
+
+        self.stdout_stream = Output()
+        self.stderr_stream = Output()
+
+        self.stdout_stream_model = Output()
+        self.stderr_stream_model = Output()
+
+        sys.stdout = self.stdout_stream
+        sys.stderr = self.stderr_stream
+        self.stdout_stream.newText.connect(self.ui.status_text.appendPlainText)
+        self.stderr_stream.newText.connect(self.ui.status_text.appendPlainText)
+
+        self.stdout_stream_model.newText.connect(self.ui.model_status.appendPlainText)
+        self.stderr_stream_model.newText.connect(self.ui.model_status.appendPlainText)
+
+        # --------------------------------
+        # CONNECTING BUTTONS CSV_EDITOR
 
         self.ui.attach_btn_1.clicked.connect(self.callbacks.attach_file_1)
         self.ui.attach_btn_2.clicked.connect(self.callbacks.attach_file_2)
@@ -89,6 +105,14 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.select_all_1.stateChanged.connect(self.callbacks.select_all_checkbox_1)
         self.ui.select_all_2.stateChanged.connect(self.callbacks.select_all_checkbox_2)
         self.ui.clear_button.clicked.connect(self.ui.status_text.clear)
+
+        # --------------------------------
+        # CONNECTING BUTTONS MODEL
+
+        self.ui.model_button_browse_new_model.clicked.connect(self.model_callbacks.browse_new_model)
+        self.ui.model_checkbox_select_all.clicked.connect(self.model_callbacks._select_all_checkbox)
+        self.ui.model_button_output.clicked.connect(self.model_callbacks.select_output_model)
+        self.ui.model_clear.clicked.connect(self.ui.model_status.clear)
 
 
     # Functions working with globals variables
@@ -181,6 +205,27 @@ class mywindow(QtWidgets.QMainWindow):
             'output_name': self.ui.name_of_output_file_plain_text_1.toPlainText()
         }
         return params
+
+
+    def add_model_path(self, is_new: bool, new_path: str):
+        try:
+            if is_new:
+                self.new_model_path = new_path
+                print(f'[INFO]: Successfuly. The path to model: {new_path}')
+                print('[INFO]: Please, select any factors and ONE argument')
+                return 1
+            else:
+                return 1
+        except Exception as ex:
+            print(f'[ERROR]: {ex}')
+            return 0
+
+    def set_model_output_path(self, output_path: str):
+            """
+            Saving output path
+            """
+            self.output_model_path = output_path
+            return output_path
 
 ## =====================================================
 # === DEFAULT ===
