@@ -3,6 +3,7 @@ import pandas as pd
 from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QFileDialog
+from .predict import Model
 
 
 # =====================================================
@@ -78,7 +79,6 @@ class UIModelCallbacks:
         sys.stderr = self.main_window.stderr_stream
 
     def select_output_model(self):
-
         sys.stdout = self.main_window.stdout_stream_model
         sys.stderr = self.main_window.stderr_stream_model
 
@@ -90,3 +90,26 @@ class UIModelCallbacks:
 
         sys.stdout = self.main_window.stdout_stream
         sys.stderr = self.main_window.stderr_stream
+
+    # ---------------------------------------------------------
+    # MODEL
+
+    def create_new_model(self):
+
+        params = self.main_window.get_model_params()
+
+        self.new_model_thread = QThread()
+
+        self.new_model_worker = Model(**params)
+        self.new_model_worker.moveToThread(self.new_model_thread)
+
+        self.new_model_thread.started.connect(self.new_model_worker.train)
+        self.new_model_worker.status_update.connect(self.main_window.ui.model_status.appendPlainText)
+
+        self.new_model_worker.formula_signal.connect(self.main_window.ui.model_plaintext_formula.setPlainText) # TAKE FORMULA
+
+        self.new_model_worker.finished.connect(self.new_model_thread.quit)
+        self.new_model_worker.finished.connect(self.new_model_worker.deleteLater)
+        self.new_model_thread.finished.connect(self.new_model_thread.deleteLater)
+
+        self.new_model_thread.start()

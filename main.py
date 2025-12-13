@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
-from src.raw.gui import Ui_MainWindow
+from src.raw.gui_1 import Ui_MainWindow
 from src.csv_editor.UI_logic import UICallbacks
 from src.model.UI_model import UIModelCallbacks
 
@@ -11,6 +11,7 @@ from src.model.UI_model import UIModelCallbacks
 # === APP SETTINGS===
 # =====================================================
 
+# pyuic5 gui.ui -o gui.py
 # os.environ["QT_SCALE_FACTOR"] = "2"
 os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 # QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
@@ -71,8 +72,12 @@ class mywindow(QtWidgets.QMainWindow):
         # --------------------------------
         # MAIN MODEL VARIABLES
 
+        self.model = None # <-- save model here!
+
         self.new_model_path = ""
         self.output_model_path = ""
+        self.features = []
+        self.argument = []
         self.predict_model_path = ""
 
         # --------------------------------
@@ -113,7 +118,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.model_checkbox_select_all.clicked.connect(self.model_callbacks._select_all_checkbox)
         self.ui.model_button_output.clicked.connect(self.model_callbacks.select_output_model)
         self.ui.model_clear.clicked.connect(self.ui.model_status.clear)
-
+        self.ui.model_button_train.clicked.connect(self.model_callbacks.create_new_model) # NICE
 
     # Functions working with globals variables
     def add_path(self, num_of_file: int, new_path: str):
@@ -227,7 +232,26 @@ class mywindow(QtWidgets.QMainWindow):
             self.output_model_path = output_path
             return output_path
 
-## =====================================================
+    def _get_columns(self, widget: QtWidgets.QListWidget):
+        columns = []
+        for column in range(widget.count()):
+             item = widget.item(column)
+             if item.checkState() == QtCore.Qt.CheckState.Checked:
+                  columns.append(item.text())
+
+        return columns
+
+    def get_model_params(self):
+        params={
+            'path_to_csv': self.new_model_path,
+            'output_path': self.output_model_path,
+            'features': self._get_columns(self.ui.model_listwidget_factors),
+            'argument': self._get_columns(self.ui.model_listwidget_argument),
+            'formula': self.ui.model_plaintext_formula.toPlainText() if self.ui.model_plaintext_formula.toPlainText() else False
+        }
+        return params
+
+# =====================================================
 # === DEFAULT ===
 # =====================================================
 

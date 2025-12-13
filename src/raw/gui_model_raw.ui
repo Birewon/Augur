@@ -557,7 +557,19 @@
          <property name="sizeConstraint">
           <enum>QLayout::SetNoConstraint</enum>
          </property>
-         <item row="0" column="1">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>3</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>6</number>
+         </property>
+         <item row="1" column="0">
           <widget class="QPlainTextEdit" name="model_plaintext_browse_new_model">
            <property name="maximumSize">
             <size>
@@ -583,6 +595,35 @@
            </property>
            <property name="text">
             <string>New Model</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="model_button_load">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Load Model</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QPlainTextEdit" name="model_plaintext_load">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="cursor" stdset="0">
+            <cursorShape>ForbiddenCursor</cursorShape>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -614,15 +655,15 @@
        </item>
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="0">
+          <widget class="QListWidget" name="model_listwidget_factors"/>
+         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="model_label_factors">
            <property name="text">
             <string>Select factors:</string>
            </property>
           </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QListWidget" name="model_listwidget_factors"/>
          </item>
         </layout>
        </item>
@@ -690,7 +731,7 @@
         <x>440</x>
         <y>10</y>
         <width>421</width>
-        <height>59</height>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_16">
@@ -726,17 +767,17 @@
        </item>
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout_15">
-         <item row="0" column="1">
-          <widget class="QRadioButton" name="model_radiobutton_float">
-           <property name="text">
-            <string>&quot;float&quot;</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0">
           <widget class="QRadioButton" name="model_radiobutton_int">
            <property name="text">
             <string>&quot;int&quot;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QRadioButton" name="model_radiobutton_float">
+           <property name="text">
+            <string>&quot;float&quot;</string>
            </property>
           </widget>
          </item>
@@ -752,6 +793,25 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="0" column="3">
+          <widget class="QPushButton" name="model_button_train">
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Train</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

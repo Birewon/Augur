@@ -113,6 +113,7 @@ Below is an overview of the current status and future plans for PredictiveAnalyt
 * **🎨 PyQt5:** For creating the graphical user interface.
 * **🐼 pandas:** For efficient processing and manipulation of `.csv` data.
 * **🤖 scikit-learn:** For implementing various predictive modeling algorithms.
+* **📈 statsmodels:** For creating models and generating detailed statistical output.
 
 -----
 
