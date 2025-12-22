@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>869</width>
+    <width>870</width>
     <height>590</height>
    </rect>
   </property>
@@ -510,43 +510,52 @@
        <property name="verticalSpacing">
         <number>0</number>
        </property>
-       <item row="3" column="0">
-        <layout class="QGridLayout" name="gridLayout_13">
-         <property name="topMargin">
-          <number>5</number>
+       <item row="4" column="0" colspan="2">
+        <widget class="QPushButton" name="model_clear">
+         <property name="text">
+          <string>Clear</string>
          </property>
-         <property name="bottomMargin">
-          <number>5</number>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QPlainTextEdit" name="model_status">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>300</height>
+          </size>
          </property>
-         <property name="verticalSpacing">
-          <number>6</number>
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="model_button_output">
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="model_checkbox_select_all">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Select all</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="0">
+          <widget class="QListWidget" name="model_listwidget_factors">
            <property name="maximumSize">
             <size>
-             <width>200</width>
-             <height>25</height>
+             <width>16777215</width>
+             <height>200</height>
             </size>
-           </property>
-           <property name="text">
-            <string>Output</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QPlainTextEdit" name="model_plaintext_output">
-           <property name="maximumSize">
-            <size>
-             <width>200</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="cursor" stdset="0">
-            <cursorShape>ForbiddenCursor</cursorShape>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
+         <item row="0" column="0">
+          <widget class="QLabel" name="model_label_factors">
+           <property name="text">
+            <string>Select factors:</string>
            </property>
           </widget>
          </item>
@@ -629,16 +638,6 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="model_checkbox_select_all">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Select all</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
@@ -652,76 +651,6 @@
           <widget class="QListWidget" name="model_listwidget_argument"/>
          </item>
         </layout>
-       </item>
-       <item row="1" column="0">
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0">
-          <widget class="QListWidget" name="model_listwidget_factors"/>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="model_label_factors">
-           <property name="text">
-            <string>Select factors:</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="3" column="1">
-        <layout class="QGridLayout" name="gridLayout_17" rowstretch="0,0" columnstretch="0">
-         <property name="topMargin">
-          <number>5</number>
-         </property>
-         <property name="bottomMargin">
-          <number>5</number>
-         </property>
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="model_button_browse_predict">
-           <property name="maximumSize">
-            <size>
-             <width>200</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Predict</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPlainTextEdit" name="model_plaintext_predict_path">
-           <property name="maximumSize">
-            <size>
-             <width>200</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="cursor" stdset="0">
-            <cursorShape>ForbiddenCursor</cursorShape>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QPlainTextEdit" name="model_status">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QPushButton" name="model_clear">
-         <property name="text">
-          <string>Clear</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -768,43 +697,16 @@
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout_15">
          <item row="0" column="0">
-          <widget class="QRadioButton" name="model_radiobutton_int">
-           <property name="text">
-            <string>&quot;int&quot;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QRadioButton" name="model_radiobutton_float">
-           <property name="text">
-            <string>&quot;float&quot;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="3">
           <widget class="QPushButton" name="model_button_train">
            <property name="minimumSize">
             <size>
-             <width>150</width>
+             <width>200</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>200</width>
+             <width>16777215</width>
              <height>25</height>
             </size>
            </property>
@@ -814,6 +716,133 @@
           </widget>
          </item>
         </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="Line" name="line_2">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>140</y>
+        <width>421</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>80</y>
+        <width>421</width>
+        <height>59</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_19">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_18">
+         <item row="0" column="0">
+          <widget class="QPushButton" name="model_button_output">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Output path</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPlainTextEdit" name="model_plaintext_output">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="cursor" stdset="0">
+            <cursorShape>ForbiddenCursor</cursorShape>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="model_button_save_model">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SAVE MODEL</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>170</y>
+        <width>422</width>
+        <height>57</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_17">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="model_button_browse_predict">
+         <property name="minimumSize">
+          <size>
+           <width>420</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Predict</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPlainTextEdit" name="model_plaintext_predict_path">
+         <property name="minimumSize">
+          <size>
+           <width>420</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="cursor" stdset="0">
+          <cursorShape>ForbiddenCursor</cursorShape>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

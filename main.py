@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
-from src.raw.gui_1 import Ui_MainWindow
+from src.raw.gui_5 import Ui_MainWindow
 from src.csv_editor.UI_logic import UICallbacks
 from src.model.UI_model import UIModelCallbacks
 
@@ -73,9 +73,9 @@ class mywindow(QtWidgets.QMainWindow):
         # MAIN MODEL VARIABLES
 
         self.model = None # <-- save model here!
+        self.output_model_path = None
 
         self.new_model_path = ""
-        self.output_model_path = ""
         self.features = []
         self.argument = []
         self.predict_model_path = ""
@@ -118,7 +118,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.model_checkbox_select_all.clicked.connect(self.model_callbacks._select_all_checkbox)
         self.ui.model_button_output.clicked.connect(self.model_callbacks.select_output_model)
         self.ui.model_clear.clicked.connect(self.ui.model_status.clear)
+        self.ui.model_button_formula.clicked.connect(self.model_callbacks.generate_formula)
         self.ui.model_button_train.clicked.connect(self.model_callbacks.create_new_model) # NICE
+        self.ui.model_button_save_model.clicked.connect(self.model_callbacks.save_model_to_file)
 
     # Functions working with globals variables
     def add_path(self, num_of_file: int, new_path: str):
@@ -244,7 +246,6 @@ class mywindow(QtWidgets.QMainWindow):
     def get_model_params(self):
         params={
             'path_to_csv': self.new_model_path,
-            'output_path': self.output_model_path,
             'features': self._get_columns(self.ui.model_listwidget_factors),
             'argument': self._get_columns(self.ui.model_listwidget_argument),
             'formula': self.ui.model_plaintext_formula.toPlainText() if self.ui.model_plaintext_formula.toPlainText() else False

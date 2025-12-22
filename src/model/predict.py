@@ -1,5 +1,4 @@
 # import os
-import joblib
 import pandas as pd
 import statsmodels.formula.api as smf
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
@@ -13,10 +12,11 @@ class Model(QObject):
     status_update = pyqtSignal(str)
     finished = pyqtSignal()
 
-    def __init__(self, path_to_csv: str, output_path: str, features: list, argument: list, formula: str | bool = False):
+    save_model = pyqtSignal(object)
+
+    def __init__(self, path_to_csv: str, features: list, argument: list, formula: str | bool = False):
         super().__init__()
         self.path = path_to_csv
-        self.outpu_path = output_path
         self.features = features
         self.argument = argument
         self.formula = formula
@@ -50,16 +50,21 @@ class Model(QObject):
 
     @pyqtSlot()
     def train(self):
-        self.create_df(self.path, self.features, self.argument) # CREATE DataFrame
-        self.X_train, self.X_test, self.y_train, self.y_test = self.division_train_test(self.df, self.argument) # DIVISION_TRAIN_TEST
-        self.create_formula(self.formula, self.features, self.argument) # CREATE Formula
-        df_train = pd.concat([self.y_train, self.X_train], axis=1) # MAKE !TRAIN!
+        try:
+            self.create_df(self.path, self.features, self.argument) # CREATE DataFrame
+            self.X_train, self.X_test, self.y_train, self.y_test = self.division_train_test(self.df, self.argument) # DIVISION_TRAIN_TEST
+            self.create_formula(self.formula, self.features, self.argument) # CREATE Formula
+            df_train = pd.concat([self.y_train, self.X_train], axis=1) # MAKE !TRAIN!
 
-        self.model = smf.ols(self.formula, data=df_train).fit()
-        self.status_update.emit(self.model.summary().as_text())
-        self.formula_signal.emit(self.formula)
+            self.model = smf.ols(self.formula, data=df_train).fit()
+            self.save_model.emit(self.model)
+            self.status_update.emit(self.model.summary().as_text())
+            self.formula_signal.emit(self.formula)
 
-        self.finished.emit()
+            self.finished.emit()
+        except Exception as ex:
+            self.status_update.emit(f'[ERROR]: {ex}')
+            self.finished.emit()
 
 
 

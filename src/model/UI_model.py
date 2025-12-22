@@ -1,4 +1,6 @@
 import sys
+import os
+import pickle
 import pandas as pd
 from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, QtCore
@@ -70,6 +72,10 @@ class UIModelCallbacks:
                         model_columns = list(df.columns)
                         self._populate_list_widget(self.main_window.ui.model_listwidget_factors, model_columns)
                         self._populate_list_widget(self.main_window.ui.model_listwidget_argument, model_columns)
+                        print(df.info())
+                        print('='*100)
+                        print(df.describe())
+                        print('='*100)
                 except Exception as ex:
                     print(f'[ERROR]: {ex}')
             else:
@@ -85,8 +91,39 @@ class UIModelCallbacks:
         output_dir = QFileDialog.getExistingDirectory(self.main_window, "Select a Directory")
         if output_dir:
             self.main_window.ui.model_plaintext_output.setPlainText(output_dir)
-            self.main_window.set_model_output_path(output_dir)
-            print(f'[INFO]: Successfully! The OUTPUT directory ({output_dir}) has been added.')
+            self.main_window.output_model_path = output_dir
+            print(f'[INFO]: Successfully! The OUTPUT directory for MODEL ({output_dir}) has been added.')
+
+        sys.stdout = self.main_window.stdout_stream
+        sys.stderr = self.main_window.stderr_stream
+
+    def generate_formula(self):
+        sys.stdout = self.main_window.stdout_stream_model
+        sys.stderr = self.main_window.stderr_stream_model
+
+        features = []
+        features_WD = self.main_window.ui.model_listwidget_factors
+        argument = []
+        argument_WD = self.main_window.ui.model_listwidget_argument
+
+        try:
+            # Parsing QtWidgets:
+            for column in range(features_WD.count()):
+                item = features_WD.item(column)
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
+                    features.append(item.text())
+
+            for column in range(argument_WD.count()):
+                item = argument_WD.item(column)
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
+                    argument.append(item.text())
+                    break
+
+            formula = f'{argument[0]} ~ {'+'.join([column for column in features if column != argument[0] and column != "Unnamed: 0"])}'
+            self.main_window.ui.model_plaintext_formula.setPlainText(formula)
+
+        except Exception as ex:
+            print(f'[ERROR]: Please, select factors and an argument. Error: {ex}')
 
         sys.stdout = self.main_window.stdout_stream
         sys.stderr = self.main_window.stderr_stream
@@ -107,9 +144,43 @@ class UIModelCallbacks:
         self.new_model_worker.status_update.connect(self.main_window.ui.model_status.appendPlainText)
 
         self.new_model_worker.formula_signal.connect(self.main_window.ui.model_plaintext_formula.setPlainText) # TAKE FORMULA
+        self.new_model_worker.save_model.connect(self.save_model_to_var) # TAKE THE MODEL
 
         self.new_model_worker.finished.connect(self.new_model_thread.quit)
         self.new_model_worker.finished.connect(self.new_model_worker.deleteLater)
         self.new_model_thread.finished.connect(self.new_model_thread.deleteLater)
 
         self.new_model_thread.start()
+
+    def save_model_to_var(self, model):
+        self.main_window.model = model
+
+    def save_model_to_file(self):
+        sys.stdout = self.main_window.stdout_stream_model
+        sys.stderr = self.main_window.stderr_stream_model
+
+        model = self.main_window.model
+        output_path = self.main_window.output_model_path
+        print(model, output_path)
+
+        if not output_path:
+            self.output_path = '~/Documents' # OR  os.path.expanduser('~/Documents')
+            self.main_window.ui.model_plaintext_output.setPlainText('~/Documents')
+
+        from datetime import datetime
+        time = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"model_{time}.pkl"
+
+        if model:
+            try:
+                with open(os.path.join(output_path, filename), 'wb') as file:
+                    pickle.dump(model, file)
+                print(f'[INFO]: The model was saved --> {output_path}')
+            except Exception as ex:
+                print(f'[ERROR]: {ex}')
+        else:
+            print('[!!!]: If you want to save the model, you must select a output path.')
+
+        sys.stdout = self.main_window.stdout_stream
+        sys.stderr = self.main_window.stderr_stream
+        return
