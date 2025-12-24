@@ -1,4 +1,5 @@
 # import os
+from typing import Any
 import pandas as pd
 import statsmodels.formula.api as smf
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
@@ -14,7 +15,7 @@ class Model(QObject):
 
     save_model = pyqtSignal(object)
 
-    def __init__(self, path_to_csv: str, features: list, argument: list, formula: str | bool = False):
+    def __init__(self, model: Any| None, path_to_csv: str, features: list | None, argument: list | None, formula: str | bool | None = False):
         super().__init__()
         self.path = path_to_csv
         self.features = features
@@ -22,7 +23,7 @@ class Model(QObject):
         self.formula = formula
         self.df = None # create_df()
 
-        self.model = None # train()
+        self.model = model # train()
 
     def create_df(self, path: str, features: list, argument: list) -> pd.DataFrame:
         columns = features + argument
@@ -65,6 +66,26 @@ class Model(QObject):
         except Exception as ex:
             self.status_update.emit(f'[ERROR]: {ex}')
             self.finished.emit()
+
+    @pyqtSlot()
+    def predict(self):
+        try:
+            model = self.model
+            columns = [name for name in model.model.exog_names if name != 'Intercept']
+            data = pd.read_csv(self.path, usecols=columns)
+
+            pred = model.predict(data)
+
+            self.status_update.emit('======== SUCCESSFULY PREDICTION ========')
+            self.status_update.emit(pred.to_string(index=True))
+            self.finished.emit()
+
+        except Exception as ex:
+            self.status_update.emit(f'[ERROR]: {ex}')
+            self.finished.emit()
+
+
+
 
 
 

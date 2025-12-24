@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
-from src.raw.gui_5 import Ui_MainWindow
+from src.raw.gui import Ui_MainWindow
 from src.csv_editor.UI_logic import UICallbacks
 from src.model.UI_model import UIModelCallbacks
 
@@ -73,12 +73,16 @@ class mywindow(QtWidgets.QMainWindow):
         # MAIN MODEL VARIABLES
 
         self.model = None # <-- save model here!
-        self.output_model_path = None
 
-        self.new_model_path = ""
+        self.output_model_path = None
+        self.new_model_path = None # PATH FOR NEW MODEL
         self.features = []
         self.argument = []
-        self.predict_model_path = ""
+
+        self.predict_model_path = None # PATH FOR LOADED MODEL
+        self.predict_csv_path = None # PATH FOR CSV FOR PREDICTION
+
+
 
         # --------------------------------
         # REDIRECTING PRINT AND WARNINGS TO status_text
@@ -121,6 +125,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.model_button_formula.clicked.connect(self.model_callbacks.generate_formula)
         self.ui.model_button_train.clicked.connect(self.model_callbacks.create_new_model) # NICE
         self.ui.model_button_save_model.clicked.connect(self.model_callbacks.save_model_to_file)
+        self.ui.model_button_browse_predict_csv.clicked.connect(self.model_callbacks.select_load_model)
+        self.ui.model_button_load.clicked.connect(self.model_callbacks.load_model)
+        self.ui.model_button_browse_predict.clicked.connect(self.model_callbacks.predict_loaded_model)
 
     # Functions working with globals variables
     def add_path(self, num_of_file: int, new_path: str):
@@ -222,6 +229,8 @@ class mywindow(QtWidgets.QMainWindow):
                 print('[INFO]: Please, select any factors and ONE argument')
                 return 1
             else:
+                self.predict_csv_path = new_path
+                print(f'[INFO]: Successfuly. The path to LOADED model: {new_path}')
                 return 1
         except Exception as ex:
             print(f'[ERROR]: {ex}')
@@ -243,14 +252,28 @@ class mywindow(QtWidgets.QMainWindow):
 
         return columns
 
-    def get_model_params(self):
+    def get_model_params(self): # --> UI_model: create_new_model
         params={
+            'model': None,
             'path_to_csv': self.new_model_path,
             'features': self._get_columns(self.ui.model_listwidget_factors),
             'argument': self._get_columns(self.ui.model_listwidget_argument),
             'formula': self.ui.model_plaintext_formula.toPlainText() if self.ui.model_plaintext_formula.toPlainText() else False
         }
         return params
+
+    def get_model_params_for_predict(self): # --> UI_model: predict
+        params = {
+            'model': self.model,
+            'path_to_csv': self.predict_csv_path,
+            'features': None,
+            'argument': None,
+            'formula': None
+        }
+
+        return params
+
+
 
 # =====================================================
 # === DEFAULT ===

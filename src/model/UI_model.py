@@ -84,7 +84,7 @@ class UIModelCallbacks:
         sys.stdout = self.main_window.stdout_stream
         sys.stderr = self.main_window.stderr_stream
 
-    def select_output_model(self):
+    def select_output_model(self): # select output path for trained model --> main: output_model_path
         sys.stdout = self.main_window.stdout_stream_model
         sys.stderr = self.main_window.stderr_stream_model
 
@@ -93,6 +93,42 @@ class UIModelCallbacks:
             self.main_window.ui.model_plaintext_output.setPlainText(output_dir)
             self.main_window.output_model_path = output_dir
             print(f'[INFO]: Successfully! The OUTPUT directory for MODEL ({output_dir}) has been added.')
+
+        sys.stdout = self.main_window.stdout_stream
+        sys.stderr = self.main_window.stderr_stream
+
+    def select_load_model(self): # LOAD CSV for prediction --> main: predict_model_path
+
+        sys.stdout = self.main_window.stdout_stream_model
+        sys.stderr = self.main_window.stderr_stream_model
+
+        dialog = QFileDialog(self.main_window)
+        dialog.setNameFilter("*.csv")
+        dialog.setFileMode(QFileDialog.FileMode.AnyFile)
+        if dialog.exec_():
+            filename = dialog.selectedFiles()
+            if filename:
+                path = filename[0]
+                try:
+                    response = self.main_window.add_model_path(False, path)
+                    if response:
+                        self.main_window.ui.model_plaintext_predict_path_csv.setPlainText(path)
+                        self.main_window.ui.model_listwidget_factors.clear()
+                        self.main_window.ui.model_listwidget_argument.clear()
+                        df = pd.read_csv(
+                            path,
+                            sep=',',
+                            header=0,
+                            na_values=['', 'N/A']
+                        )
+                        print(df.info())
+                        print('='*100)
+                        print(df.describe())
+                        print('='*100)
+                except Exception as ex:
+                    print(f'[ERROR]: {ex}')
+            else:
+                print("[INFO]: The file was not attached")
 
         sys.stdout = self.main_window.stdout_stream
         sys.stderr = self.main_window.stderr_stream
@@ -131,7 +167,7 @@ class UIModelCallbacks:
     # ---------------------------------------------------------
     # MODEL
 
-    def create_new_model(self):
+    def create_new_model(self): # TRAIN MAIN
 
         params = self.main_window.get_model_params()
 
@@ -161,7 +197,6 @@ class UIModelCallbacks:
 
         model = self.main_window.model
         output_path = self.main_window.output_model_path
-        print(model, output_path)
 
         if not output_path:
             self.output_path = '~/Documents' # OR  os.path.expanduser('~/Documents')
@@ -184,3 +219,49 @@ class UIModelCallbacks:
         sys.stdout = self.main_window.stdout_stream
         sys.stderr = self.main_window.stderr_stream
         return
+
+
+    def load_model(self): # LOAD MODEL.pkl
+        sys.stdout = self.main_window.stdout_stream_model
+        sys.stderr = self.main_window.stderr_stream_model
+
+        dialog = QFileDialog(self.main_window)
+        dialog.setNameFilter("*.pkl")
+        dialog.setFileMode(QFileDialog.FileMode.AnyFile)
+        if dialog.exec_():
+            filename = dialog.selectedFiles()
+            if filename:
+                path = filename[0]
+                try:
+                    with open(path, 'rb') as file:
+                        self.main_window.model = pickle.load(file)
+                    print('[+++]: The model was loaded!')
+                except Exception as ex:
+                    print(f'[ERROR]: {ex}')
+            else:
+                print("[ATTENTION]: The model was not loaded")
+
+    def predict_loaded_model(self):
+        model = self.main_window.model
+        if not model:
+            sys.stdout = self.main_window.stdout_stream_model
+            sys.stderr = self.main_window.stderr_stream_model
+            print('[!!!]: MODEL NOT FOUND')
+            sys.stdout = self.main_window.stdout_stream_model
+            sys.stderr = self.main_window.stderr_stream_model
+        else:
+            params = self.main_window.get_model_params_for_predict()
+
+            self.predict_thread = QThread()
+
+            self.predict_worker = Model(**params)
+            self.predict_worker.moveToThread(self.predict_thread)
+
+            self.predict_thread.started.connect(self.predict_worker.predict)
+            self.predict_worker.status_update.connect(self.main_window.ui.model_status.appendPlainText)
+
+            self.predict_worker.finished.connect(self.predict_thread.quit)
+            self.predict_worker.finished.connect(self.predict_worker.deleteLater)
+            self.predict_thread.finished.connect(self.predict_thread.deleteLater)
+
+            self.predict_thread.start()
