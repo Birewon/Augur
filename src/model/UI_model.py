@@ -1,6 +1,7 @@
 import sys
 import os
 import pickle
+from datetime import datetime
 import pandas as pd
 from PyQt5.QtCore import QThread
 from PyQt5 import QtWidgets, QtCore
@@ -258,10 +259,43 @@ class UIModelCallbacks:
             self.predict_worker.moveToThread(self.predict_thread)
 
             self.predict_thread.started.connect(self.predict_worker.predict)
-            self.predict_worker.status_update.connect(self.main_window.ui.model_status.appendPlainText)
+            self.predict_worker.status_update.connect(self._predict_loaded_model_save_response)
 
             self.predict_worker.finished.connect(self.predict_thread.quit)
             self.predict_worker.finished.connect(self.predict_worker.deleteLater)
             self.predict_thread.finished.connect(self.predict_thread.deleteLater)
 
             self.predict_thread.start()
+
+    def _predict_loaded_model_save_response(self, response):
+        self.main_window.ui.model_status.appendPlainText(response)
+        self.main_window.predict_response = response
+
+    def set_path_and_filename(self):
+        self.main_window.predict_response_path = self.main_window.ui.model_set_output_predict_text.toPlainText() # СДЕЛАТЬ ВЫБОР ПУТИ!!!
+        self.main_window.predict_response_filename = self.main_window.model_set_filename_predict_text.toPlainText()
+
+    def save_predict_data(self):
+        sys.stdout = self.main_window.stdout_stream_model
+        sys.stderr = self.main_window.stderr_stream_model
+
+        path = self.main_window.predict_response_path
+        filename = self.main_window.predict_response_filename
+        data = self.main_window.predict_response
+
+        if not path:
+            path = '~/Documents'
+        if not filename:
+            time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            filename = f"prediction_{time}.txt"
+
+        try:
+            full_name = os.path.expanduser(os.path.join(path, filename))
+            with open(full_name, 'w') as file:
+                file.write(data)
+                print(f"[INFO]: Saved predict: {full_name}")
+        except Exception as ex:
+            print(f'[ERROR]: {ex}, Press "Predict"')
+
+        sys.stdout = self.main_window.stdout_stream_model
+        sys.stderr = self.main_window.stderr_stream_model

@@ -82,7 +82,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.predict_model_path = None # PATH FOR LOADED MODEL
         self.predict_csv_path = None # PATH FOR CSV FOR PREDICTION
 
-
+        self.predict_response_path = None
+        self.predict_response_filename = None
+        self.predict_response = None
 
         # --------------------------------
         # REDIRECTING PRINT AND WARNINGS TO status_text
@@ -128,6 +130,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.model_button_browse_predict_csv.clicked.connect(self.model_callbacks.select_load_model)
         self.ui.model_button_load.clicked.connect(self.model_callbacks.load_model)
         self.ui.model_button_browse_predict.clicked.connect(self.model_callbacks.predict_loaded_model)
+        self.ui.model_set_output_predict_button.clicked.connect(self.model_callbacks.set_path_and_filename)
+        self.ui.model_set_filename_predict_button.clicked.connect(self.model_callbacks.set_path_and_filename)
+        self.ui.model_save_predict_button.clicked.connect(self.model_callbacks.save_predict_data)
 
     # Functions working with globals variables
     def add_path(self, num_of_file: int, new_path: str):
