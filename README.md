@@ -1,8 +1,8 @@
-# PredictiveAnalyticsApp 🚀
+# Augur 🚀
 
 ### Create Predictive Models Based on Your Data 📊
 
-**PredictiveAnalyticsApp** is a user-friendly desktop application designed to simplify the processes of loading, editing, and analyzing data from `.csv` files, as well as subsequently building powerful predictive models.
+**Augur** is a user-friendly desktop application designed to simplify the processes of loading, editing, and analyzing data from `.csv` files, as well as subsequently building powerful predictive models.
 
 No more need to write code for basic analysis or data preprocessing. This application allows you to quickly prepare data and get predictions, whether it's weather forecasting, predicting a student's grade probability, estimating startup success chances, or anything else you can imagine!
 
@@ -37,8 +37,8 @@ No more need to write code for basic analysis or data preprocessing. This applic
 To install the application, clone the repository:
 
 ```bash
-git clone https://github.com/Birewon/PredictiveAnalyticsApp.git
-cd PredictiveAnalyticsApp
+git clone https://github.com/Birewon/Augur.git
+cd Augur
 ```
 
 Then create your own virtual environment (not necessary):
@@ -74,13 +74,13 @@ chmod +x ./run.sh
 source ./run.sh
 ```
 
-IF YOU HAVE ANY PROBLEMS WITH INSTALLATION YOU CAN ASK THEM HERE: [Issue](https://github.com/Birewon/PredictiveAnalyticsApp/issues)
+IF YOU HAVE ANY PROBLEMS WITH INSTALLATION YOU CAN ASK THEM HERE: [Issue](https://github.com/Birewon/Augur/issues)
 
 -----
 
 ### Roadmap 🗺️
 
-Below is an overview of the current status and future plans for PredictiveAnalyticsApp.
+Below is an overview of the current status and future plans for Augur.
 
 #### Already Implemented:
 
@@ -119,4 +119,4 @@ Below is an overview of the current status and future plans for PredictiveAnalyt
 
 ### Contributing 🤝
 
-The application welcomes ideas and suggestions! If you have any feedback or would like to contribute, please create an [Issue](https://github.com/Birewon/PredictiveAnalyticsApp/issues) or [Pull Request](https://github.com/Birewon/PredictiveAnalyticsApp/pulls) on GitHub.
+The application welcomes ideas and suggestions! If you have any feedback or would like to contribute, please create an [Issue](https://github.com/Birewon/Augur/issues) or [Pull Request](https://github.com/Birewon/Augur/pulls) on GitHub.

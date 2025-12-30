@@ -921,7 +921,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "CSVeditor"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Augur"))
         self.clear_button.setText(_translate("MainWindow", "Clear"))
         self.add_text_3.setText(_translate("MainWindow", "Output path:"))
         self.attach_btn_3.setText(_translate("MainWindow", "Select"))

@@ -1,32 +1,33 @@
 #!/bin/bash
 
-echo " ____                  __  ______                    ";
-echo "/\\  _\`\\               /\\ \\/\\  _  \\                   ";
-echo "\\ \\ \\L\\ \\_ __    __   \\_\\ \\ \\ \\L\\ \\  _____   _____   ";
-echo " \\ \\ ,__/\\\`'__\\/'__\`\\ /'_\` \\ \\  __ \\/\\ '__\`\\/\\ '__\`\\ ";
-echo "  \\ \\ \\/\\ \\ \\//\\  __//\\ \\L\\ \\ \\ \\/\\ \\ \\ \\L\\ \\ \\ \\L\\ \\";
-echo "   \\ \\_\\ \\ \\_\\\\ \\____\\ \\___,_\\ \\_\\ \\_\\ \\ ,__/\\ \\ ,__/";
-echo "    \\/_/  \\/_/ \\/____/\\/__,_ /\\/_/\\/_/\\ \\ \\/  \\ \\ \\/ ";
-echo "                                       \\ \\_\\   \\ \\_\\ ";
-echo "                                        \\/_/    \\/_/ ";
-echo "Created by: Birewon"
-echo "                            PredApp v.1.0.1-beta"
+echo ""
+echo ""
+echo " █████╗ ██╗   ██╗ ██████╗ ██╗   ██╗██████╗ ";
+echo "██╔══██╗██║   ██║██╔════╝ ██║   ██║██╔══██╗";
+echo "███████║██║   ██║██║  ███╗██║   ██║██████╔╝";
+echo "██╔══██║██║   ██║██║   ██║██║   ██║██╔══██╗";
+echo "██║  ██║╚██████╔╝╚██████╔╝╚██████╔╝██║  ██║";
+echo "╚═╝  ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝";
+echo "                                           ";
+echo "Created by: Birewon    PredApp v.1.0.1-beta"
+echo "                           "
 echo ""
 
 if [[ $1 == "--help" ]]; then
-	echo "Help information:"
-	echo "There will be useful information here"
+	echo "Help information:\n"
+	echo "Launch/Install --> ./run.sh"
+	echo "Delete --> ./run.sh --del_venv"
 	exit
 
-elif [[ $1 == "del_venv" ]]; then
-	rm -rf $PWD/PredictiveAnalyticsApp_v.0.0.0-venv
+elif [[ $1 == "--del_venv" ]]; then
+	rm -rf $PWD/Augur_v.0.0.0-venv
 	printf "\n[+]: Virtual environment has been deleted.\n\n"
 	exit
 fi
 
-if [ -d "$PWD/PredictiveAnalyticsApp_v.0.0.0-venv" ]; then
+if [ -d "$PWD/Augur_v.0.0.0-venv" ]; then
 	echo "[*]: Activate Python virtual env..."
-	source $PWD/PredictiveAnalyticsApp_v.0.0.0-venv/bin/activate &>-
+	source $PWD/Augur_v.0.0.0-venv/bin/activate &>-
 	echo "[+]: Done"
 	echo "[*]: Starting..."
 	python3.12 main.py
@@ -55,11 +56,11 @@ else
 		sudo make altinstall
 		cd ..
 		printf "\n\n[+]: Creating virtual environment..."
-		python3.12 -m venv PredictiveAnalyticsApp_v.0.0.0-venv
+		python3.12 -m venv Augur_v.0.0.0-venv
 		echo "[+]: Done"
 
 		echo "[*]: Activating venv..."
-		source $PWD/PredictiveAnalyticsApp_v.0.0.0-venv/bin/activate
+		source $PWD/Augur_v.0.0.0-venv/bin/activate
 		echo "[+]: Done"
 
 		echo "[*]: Updating pip..."
@@ -78,4 +79,4 @@ else
 fi
 
 echo "If you have any questions about the program, you can ask them here:"
-echo "https://github.com/Birewon/PredictiveAnalyticsApp/issues"
+echo "https://github.com/Birewon/Augur/issues"
