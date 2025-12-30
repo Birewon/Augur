@@ -200,11 +200,11 @@ class UIModelCallbacks:
         output_path = self.main_window.output_model_path
 
         if not output_path:
-            self.output_path = '~/Documents' # OR  os.path.expanduser('~/Documents')
-            self.main_window.ui.model_plaintext_output.setPlainText('~/Documents')
+            output_path = os.path.expanduser('~/Documents')
+            self.main_window.ui.model_plaintext_output.setPlainText(os.path.expanduser('~/Documents'))
 
         from datetime import datetime
-        time = datetime.now().strftime("%Y%m%d_%H%M%S")
+        time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = f"model_{time}.pkl"
 
         if model:
@@ -215,7 +215,7 @@ class UIModelCallbacks:
             except Exception as ex:
                 print(f'[ERROR]: {ex}')
         else:
-            print('[!!!]: If you want to save the model, you must select a output path.')
+            print('[!!!]: If you want to save the model, you must select an output path.')
 
         sys.stdout = self.main_window.stdout_stream
         sys.stderr = self.main_window.stderr_stream
@@ -236,6 +236,7 @@ class UIModelCallbacks:
                 try:
                     with open(path, 'rb') as file:
                         self.main_window.model = pickle.load(file)
+                    self.main_window.ui.model_plaintext_load.setPlainText(path)
                     print('[+++]: The model was loaded!')
                 except Exception as ex:
                     print(f'[ERROR]: {ex}')
@@ -271,20 +272,34 @@ class UIModelCallbacks:
         self.main_window.ui.model_status.appendPlainText(response)
         self.main_window.predict_response = response
 
+    def _select_output(self):
+        sys.stdout = self.main_window.stdout_stream_model
+        sys.stderr = self.main_window.stderr_stream_model
+
+        output_dir = QFileDialog.getExistingDirectory(self.main_window, "Select a Directory")
+        if output_dir:
+            self.main_window.ui.model_set_output_predict_text.setPlainText(output_dir)
+            self.main_window.predict_response_path = output_dir
+            print(f'[INFO]: Successfully! The OUTPUT directory for PREDICTION ({output_dir}) has been added.')
+
+        sys.stdout = self.main_window.stdout_stream
+        sys.stderr = self.main_window.stderr_stream
+
     def set_path_and_filename(self):
-        self.main_window.predict_response_path = self.main_window.ui.model_set_output_predict_text.toPlainText() # СДЕЛАТЬ ВЫБОР ПУТИ!!!
-        self.main_window.predict_response_filename = self.main_window.model_set_filename_predict_text.toPlainText()
+        self._select_output()
+        self.main_window.predict_response_filename = self.main_window.ui.model_set_filename_predict_text.toPlainText()
 
     def save_predict_data(self):
         sys.stdout = self.main_window.stdout_stream_model
         sys.stderr = self.main_window.stderr_stream_model
 
         path = self.main_window.predict_response_path
-        filename = self.main_window.predict_response_filename
+        filename = self.main_window.ui.model_set_filename_predict_text.toPlainText()
         data = self.main_window.predict_response
 
         if not path:
-            path = '~/Documents'
+            path = os.path.expanduser('~/Documents')
+            self.main_window.ui.model_set_output_predict_text.setPlainText(os.path.expanduser('~/Documents'))
         if not filename:
             time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             filename = f"prediction_{time}.txt"

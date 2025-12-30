@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'src/raw/AppRaw_test.ui'
+# Form implementation generated from reading ui file 'src/raw/backup0.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -846,18 +846,17 @@ class Ui_MainWindow(object):
         self.gridLayout_22.setObjectName("gridLayout_22")
         self.gridLayout_21 = QtWidgets.QGridLayout()
         self.gridLayout_21.setObjectName("gridLayout_21")
-        self.model_set_filename_predict_button = QtWidgets.QPushButton(self.layoutWidget_3)
-        self.model_set_filename_predict_button.setMinimumSize(QtCore.QSize(0, 25))
+        self.model_filename_label = QtWidgets.QLabel(self.layoutWidget_3)
+        self.model_filename_label.setMinimumSize(QtCore.QSize(80, 25))
         font = QtGui.QFont()
         font.setFamily("DejaVu Sans")
         font.setPointSize(10)
         font.setBold(False)
-        font.setItalic(False)
         font.setWeight(50)
-        self.model_set_filename_predict_button.setFont(font)
-        self.model_set_filename_predict_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.model_set_filename_predict_button.setObjectName("model_set_filename_predict_button")
-        self.gridLayout_21.addWidget(self.model_set_filename_predict_button, 0, 0, 1, 1)
+        self.model_filename_label.setFont(font)
+        self.model_filename_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.model_filename_label.setObjectName("model_filename_label")
+        self.gridLayout_21.addWidget(self.model_filename_label, 0, 0, 1, 1)
         self.model_set_filename_predict_text = QtWidgets.QPlainTextEdit(self.layoutWidget_3)
         self.model_set_filename_predict_text.setMinimumSize(QtCore.QSize(0, 25))
         self.model_set_filename_predict_text.setMaximumSize(QtCore.QSize(16777215, 25))
@@ -916,8 +915,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.MainWidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -961,7 +960,7 @@ class Ui_MainWindow(object):
         self.model_button_browse_predict.setText(_translate("MainWindow", "Predict"))
         self.model_button_browse_predict_csv.setText(_translate("MainWindow", "Browse predict file (csv)"))
         self.model_plaintext_predict_path_csv.setPlaceholderText(_translate("MainWindow", ".csv"))
-        self.model_set_filename_predict_button.setText(_translate("MainWindow", "Filename"))
+        self.model_filename_label.setText(_translate("MainWindow", "Filename:"))
         self.model_set_filename_predict_text.setPlaceholderText(_translate("MainWindow", "Not necessarily"))
         self.model_set_output_predict_button.setText(_translate("MainWindow", "Output"))
         self.model_set_output_predict_text.setPlaceholderText(_translate("MainWindow", "~/Documents"))
